@@ -41,7 +41,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:hint = "PASSWORD"
-            android:id = "@+id/ps_eidt"/>
+            android:id = "@+id/ps_edit"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
