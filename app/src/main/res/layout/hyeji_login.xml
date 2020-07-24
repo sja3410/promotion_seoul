@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/instagram"
+        android:layout_margin="10dp">
+
+    </ImageView>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:hint="전화번호, 사용자 이름 또는 이메일"
+        android:inputType="text"
+        >
+
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:hint="비밀번호"
+        android:inputType="textPassword"
+        >
+
+    </EditText>
+
+    <Button
+        android:layout_width="206dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:onClick="buttonlogin"
+        android:text="로그인">
+
+    </Button>
+
+    <TextView
+        android:layout_width="355dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_margin="40dp"
+        android:onClick="buttonfacebook"
+        android:scaleType="centerCrop">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="계정이 없으신가요?"
+        android:textSize="15dp">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="102dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:onClick="buttonsignup"
+        android:text="가입하기"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </Button>
+
+
+</LinearLayout>
