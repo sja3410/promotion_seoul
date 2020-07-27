@@ -44,7 +44,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="15dp"
-        android:onClick="buttonlogin"
         android:text="로그인">
 
     </Button>
@@ -54,7 +53,6 @@
         android:layout_height="56dp"
         android:layout_gravity="center"
         android:layout_margin="40dp"
-        android:onClick="buttonfacebook"
         android:scaleType="centerCrop">
 
     </TextView>
@@ -74,8 +72,6 @@
         android:layout_width="102dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
-        android:background="@color/transparent"
-        android:onClick="buttonsignup"
         android:text="가입하기"
         android:textSize="15dp"
         android:textStyle="bold">

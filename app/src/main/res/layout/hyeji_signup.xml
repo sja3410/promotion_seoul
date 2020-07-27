@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".hyeji_signup.xml"
+    tools:context=".MainActivity"
     android:orientation="vertical">
 
     <ImageView
@@ -32,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="--------------------또는------------------"
-        android:textColor="@color/darkgray"
         android:layout_margin="5dp"
         android:layout_gravity="center"
         />
@@ -119,7 +118,6 @@
         android:layout_width="102dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
-        android:background="@color/transparent"
         android:onClick="buttonlogin1"
         android:text="로그인"
         android:textSize="15dp"
