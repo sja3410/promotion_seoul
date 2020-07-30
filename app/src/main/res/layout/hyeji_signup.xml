@@ -94,8 +94,6 @@
         android:layout_width="102dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
-        android:background="@color/transparent"
-        android:onClick="buttonsignup_1"
         android:layout_marginBottom="25dp"
         android:text="가입하기"
         android:textSize="15dp"
@@ -118,7 +116,6 @@
         android:layout_width="102dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
-        android:onClick="buttonlogin1"
         android:text="로그인"
         android:textSize="15dp"
         android:textStyle="bold">
