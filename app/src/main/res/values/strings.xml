@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Abilitygram</string>
+    <string name="facebook_app_id">873009302900995</string>
+    <string name="fb_login_protocol_scheme">fb873009302900995</string>
+
+    <!-- Sign In -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin_email">이메일로 로그인</string>
+    <string name="explain_signup">아직 회원가입을 하지 않았다면?</string>
+    <string name="signup"><u>Sign Up</u></string>
+    <string name="signin_google">Google login</string>
+    <string name="signin_facebook">Facebook login</string>
+    <string name="signin_twitter">Twitter login</string>
+    <string name="signup_complete">Membership success</string>
+    <string name="signin_complete">Login success</string>
+    <string name="signout">Signout</string>
+    <string name="signout_success">Signout success</string>
+    <string name="signout_fail">Signout fail</string>
+    <string name="signout_fail_null">Please enter your email and password</string>
 </resources>
