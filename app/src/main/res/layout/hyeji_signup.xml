@@ -32,11 +32,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="--------------------또는------------------"
-        android:layout_margin="5dp"
+        android:layout_margin="15dp"
         android:layout_gravity="center"
         />
 
     <EditText
+        android:id="@+id/idsignup"
         android:layout_width="300dp"
         android:layout_height="34dp"
         android:layout_gravity="center"
@@ -48,17 +49,7 @@
     </EditText>
 
     <EditText
-        android:layout_width="300dp"
-        android:layout_height="34dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/rectangle"
-        android:hint="  성명"
-        android:inputType="text">
-
-    </EditText>
-
-    <EditText
+        android:id="@+id/username"
         android:layout_width="300dp"
         android:layout_height="34dp"
         android:layout_margin="5dp"
@@ -70,6 +61,7 @@
     </EditText>
 
     <EditText
+        android:id="@+id/passwordsignup"
         android:layout_width="300dp"
         android:layout_height="34dp"
         android:layout_margin="5dp"
@@ -80,6 +72,7 @@
     </EditText>
 
     <EditText
+        android:id="@+id/repasswordsignup"
         android:layout_width="300dp"
         android:layout_height="34dp"
         android:layout_margin="5dp"
@@ -90,33 +83,12 @@
 
     </EditText>
     <Button
-        android:id="@+id/signup_1"
+        android:id="@+id/signup_button"
         android:layout_width="102dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
         android:layout_marginBottom="25dp"
         android:text="가입하기"
-        android:textSize="15dp"
-        android:textStyle="bold">
-
-    </Button>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="계정이 있으신가요?"
-        android:textSize="15dp">
-
-    </TextView>
-
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="102dp"
-        android:layout_height="37dp"
-        android:layout_gravity="center"
-        android:text="로그인"
         android:textSize="15dp"
         android:textStyle="bold">
 
