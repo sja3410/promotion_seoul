@@ -43,7 +43,7 @@ public class Signup extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == R.id.signup_button)
             {
-                Intent intent_profile = new Intent(Signup.this,ahhyun_login.class);
+                Intent intent_profile = new Intent(Signup.this,Signup.class);
                 boolean loginSuccess = signUp();
                 if(loginSuccess)
                     startActivity(intent_profile);
