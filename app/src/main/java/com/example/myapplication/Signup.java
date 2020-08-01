@@ -57,7 +57,7 @@ public class Signup extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.passwordsignup)).getText().toString();
         String re_password = ((EditText) findViewById(R.id.repasswordsignup)).getText().toString();
 
-        if (email.contains("@") && email.contains(".")) {
+        if (email.contains("@")  && (email.contains("naver.com") || email.contains("gmail.com"))) {
             if (password.equals(re_password) ) {
                 if (password.length() >= 6) { // 비밀번호 6자리
                     mAuth.createUserWithEmailAndPassword(email, password)
