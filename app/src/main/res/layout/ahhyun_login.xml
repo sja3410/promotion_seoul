@@ -65,6 +65,8 @@
             android:id="@+id/google_login_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginBottom="50dp"/>
 
         <TextView

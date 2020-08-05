@@ -57,7 +57,7 @@ public class ahhyun_login extends AppCompatActivity
         text=(TextView)findViewById(R.id.signup_text);
         text.setOnClickListener(this);
     }
-    // 유저 업데이트
+
     private void updateUI(FirebaseUser user){
         if(user != null) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -65,6 +65,7 @@ public class ahhyun_login extends AppCompatActivity
             finish();
         }
     }
+
     @Override
     public void onStart(){
         super.onStart();
@@ -100,7 +101,7 @@ public class ahhyun_login extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Log.d(TAG, "signInWithCredential:success")
+                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         }
