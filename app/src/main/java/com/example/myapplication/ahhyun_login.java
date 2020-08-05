@@ -1,3 +1,4 @@
+package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +32,7 @@ public class ahhyun_login extends AppCompatActivity
         implements View.OnClickListener
 {
     private FirebaseAuth mAuth;
-    private static final String TAG = "SignUpActivity"
+    private static final String TAG = "SignUpActivity";
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private SignInButton googleSignInButton;
@@ -40,13 +41,14 @@ public class ahhyun_login extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ahhyun_login);
+        setContentView(R.layout.ahhyun_login);
         googleSignInButton = findViewById(R.id.google_login_button);
         mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         if(mAuth.getCurrentUser() != null){
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
@@ -56,12 +58,11 @@ public class ahhyun_login extends AppCompatActivity
         text.setOnClickListener(this);
     }
     // 유저 업데이트
-    public void updateUI(FirebaseUser user){
+    private void updateUI(FirebaseUser user){
         if(user != null) {
-
-        }
-        else{
-
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
     @Override
@@ -74,6 +75,8 @@ public class ahhyun_login extends AppCompatActivity
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -82,7 +85,6 @@ public class ahhyun_login extends AppCompatActivity
             try{
                 // 구글 로그인 성공
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account);
             } catch(ApiException e){
                 // 구글 로그인 실패
@@ -90,6 +92,7 @@ public class ahhyun_login extends AppCompatActivity
             }
         }
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct){
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -113,7 +116,7 @@ public class ahhyun_login extends AppCompatActivity
     public void onClick(View v){
         switch (v.getId()){
             case R.id.signup_text:
-                Intent intent=new Intent(getApplicationContext(), ahhyun_signup.class);
+                Intent intent=new Intent(getApplicationContext(), Signup.class);
                 startActivity(intent);
         }
     }
