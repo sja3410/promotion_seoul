@@ -37,9 +37,10 @@ public class Signup extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.signup_button:
+                    signUp();
                     Intent intent_profile = new Intent(v.getContext(), SignUpExample.class);
-                    boolean signupSuccess = signUp();
-                    if (signupSuccess == true)
+        //            boolean signupSuccess = signUp();
+         //           if (signupSuccess == true)
                         startActivity(intent_profile);
                     break;
 
@@ -72,13 +73,13 @@ public class Signup extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             // Sign in success, update UI with the signed-in user's information
-                                            Log.d(TAG, "createUserWithEmail:success");
                                             FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
                                             updateUI(user);
+                                            Log.d(TAG, "createUserWithEmail:success");
                                         } else {
-
-                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                             updateUI(null);
+                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+
                                         }
                                     }
                                 });
