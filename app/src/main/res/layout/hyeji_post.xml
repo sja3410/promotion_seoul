@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/postadd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="사진 또는 영상 추가"
@@ -20,6 +21,7 @@
 
         </Button>
         <Button
+            android:id="@+id/mypagebtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
