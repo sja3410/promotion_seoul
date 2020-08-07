@@ -37,11 +37,12 @@ public class Signup extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.signup_button:
-                    signUp();
-                    Intent intent_profile = new Intent(v.getContext(), SignUpExample.class);
-        //            boolean signupSuccess = signUp();
-         //           if (signupSuccess == true)
+                    if(signUp()==true) {
+                        Intent intent_profile = new Intent(v.getContext(), SignUpExample.class);
+                        //            boolean signupSuccess = signUp();
+                        //           if (signupSuccess == true)
                         startActivity(intent_profile);
+                    }
                     break;
 
             }
@@ -75,15 +76,17 @@ public class Signup extends AppCompatActivity {
                                             // Sign in success, update UI with the signed-in user's information
                                             FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
                                             updateUI(user);
+                                            startToast("정상적으로 회원가입 되었습니다.");
                                             Log.d(TAG, "createUserWithEmail:success");
                                         } else {
                                             updateUI(null);
+                                            startToast("시스템 오류.");
                                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
 
                                         }
                                     }
                                 });
-                        startToast("정상적으로 회원가입 되었습니다.");
+                        //startToast("정상적으로 회원가입 되었습니다.");
                         return true;
                     }
                     else {
