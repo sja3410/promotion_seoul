@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,13 +24,7 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hyeji_signup);
         mAuth = FirebaseAuth.getInstance();
-        findViewById(R.id.signup_button).setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(Signup.this,Signup.class); // 페이지 이동
-            }
-        });
-
+        findViewById(R.id.signup_button).setOnClickListener(onClickListener);
     }
     @Override
     public void onStart() {
@@ -41,12 +34,14 @@ public class Signup extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(v.getId() == R.id.signup_button)
-            {
-                Intent intent_profile = new Intent(Signup.this,Signup.class);
-                boolean loginSuccess = signUp();
-                if(loginSuccess)
-                    startActivity(intent_profile);
+            switch(v.getId()){
+                case R.id.signup_button:
+                    Intent intent_profile = new Intent(v.getContext(), SignUpExample.class);
+                    boolean signupSuccess = signUp();
+                    if (signupSuccess == true)
+                        startActivity(intent_profile);
+                    break;
+
             }
         }
     };
@@ -57,42 +52,46 @@ public class Signup extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.passwordsignup)).getText().toString();
         String re_password = ((EditText) findViewById(R.id.repasswordsignup)).getText().toString();
 
-        if (email.contains("@")  && (email.contains("naver.com") || email.contains("gmail.com"))) {
-            if (password.equals(re_password) ) {
-                if (password.length() >= 6) { // 비밀번호 6자리
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d(TAG, "createUserWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
+        if (!username.isEmpty())
+        {
+            if (email.contains("@")  && (email.contains("naver.com") || email.contains("gmail.com"))) {
+                if (password.equals(re_password) ) {
+                    if (password.length() >= 6) { // 비밀번호 6자리
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Log.d(TAG, "createUserWithEmail:success");
+                                            FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
+                                        } else {
 
-                                    } else {
-
-                                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                        }
                                     }
-                                }
-                            });
-                    startToast("정상적으로 회원가입 되었습니다.");
-                    return true;
+                                });
+                        startToast("정상적으로 회원가입 되었습니다.");
+                        return true;
+                    }
+                    else {
+                        startToast("비밀번호는 여섯자리 이상으로 설정해주십시오.");
+
+                    }
                 }
                 else {
-                    startToast("비밀번호는 여섯자리 이상으로 설정해주십시오.");
-
+                    startToast("비밀번호가 같지 않습니다.");
                 }
             }
-            else {
-                startToast("비밀번호가 같지 않습니다.");
+            else{
+                startToast("올바른 이메일 형식을 입력해주십시오.");
+
             }
         }
-        else{
-            startToast("올바른 이메일 형식을 입력해주십시오.");
-
+        else {
+            startToast("사용자 이름을 입력해주십시오");
         }
         return false;
-
     }
 
     private void startToast(String msg) {
