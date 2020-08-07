@@ -10,15 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ahhyun_signup"></activity>
+<<<<<<< HEAD
         <activity android:name=".Signup">
+=======
+        <activity android:name=".SignUpExample">
+>>>>>>> 95aa5c883074a1aa011d09cf2556f9b08efa2b54
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".SignUpExample">
-
         </activity>
     </application>
 
