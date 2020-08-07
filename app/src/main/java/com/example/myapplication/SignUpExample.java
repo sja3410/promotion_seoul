@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -58,6 +59,14 @@ public class SignUpExample extends AppCompatActivity {
             }
         }
     };
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            Log.d(TAG, "updateUI: 유저 로그인 중");
+        } else {
+            Log.d(TAG, "updateUI: 유저 로그아웃 중");
+        }
+    }
+
 
     // 회원가입 함수
     public boolean signUp() {
@@ -76,11 +85,16 @@ public class SignUpExample extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "createUserWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        updateUI(user);
+
+
+
 
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                        updateUI(null);
                                     }
                                 }
                             });
