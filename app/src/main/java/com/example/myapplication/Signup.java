@@ -30,6 +30,7 @@ public class Signup extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
     View.OnClickListener onClickListener = new View.OnClickListener(){
         @Override
@@ -45,6 +46,14 @@ public class Signup extends AppCompatActivity {
             }
         }
     };
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            Log.d(TAG, "updateUI: 유저 로그인 중");
+        } else {
+            Log.d(TAG, "updateUI: 유저 로그아웃 중");
+        }
+    }
+
     public boolean signUp() {
         // 이메일, 패스워드, 패스워드 확인 값을 받음
         String email = ((EditText) findViewById(R.id.idsignup)).getText().toString();
@@ -65,9 +74,11 @@ public class Signup extends AppCompatActivity {
                                             // Sign in success, update UI with the signed-in user's information
                                             Log.d(TAG, "createUserWithEmail:success");
                                             FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
+                                            updateUI(user);
                                         } else {
 
                                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                            updateUI(null);
                                         }
                                     }
                                 });
