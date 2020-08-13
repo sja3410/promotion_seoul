@@ -1,5 +1,4 @@
 package com.example.myapplication;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private FirebaseAnalytics mFirebaseAnalytics;
     private static final String TAG = "Signup";
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -29,6 +30,7 @@ public class Signup extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
