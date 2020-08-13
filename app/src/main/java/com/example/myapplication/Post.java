@@ -20,7 +20,7 @@ public class Post extends AppCompatActivity {
         public void onClick(View v){
             switch(v.getId()){
                 case R.id.postadd:
-                    Intent intent_post = new Intent(v.getContext(), SignUpExample.class); //바꾸기 (사진 추가하는 창으로)
+                    Intent intent_post = new Intent(v.getContext(), Add_gallery.class); //바꾸기 (사진 추가하는 창으로)
                     startActivity(intent_post);
                     break;
                 case R.id.mypagebtn:
