@@ -80,7 +80,7 @@ public class ahhyun_login extends AppCompatActivity
                         .build(),
                 RC_SIGN_IN);
         if(mAuth.getCurrentUser() != null){
-            Intent intent = new Intent(getApplication(), MainActivity.class);
+            Intent intent = new Intent(getApplication(), Post.class);
             startActivity(intent);
             finish();
         }
@@ -91,7 +91,7 @@ public class ahhyun_login extends AppCompatActivity
 
     private void updateUI(FirebaseUser user){
         if(user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, Post.class);
             startActivity(intent);
             finish();
         }
