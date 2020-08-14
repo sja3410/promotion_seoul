@@ -23,12 +23,13 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:id = "@+id/profile_first">
-            <ImageView
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="20dp"
-                android:background="#C277C2"/>
+                android:background="#C277C2"
+                android:id = "@+id/img_user"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

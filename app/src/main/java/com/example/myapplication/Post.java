@@ -24,7 +24,7 @@ public class Post extends AppCompatActivity {
                     startActivity(intent_post);
                     break;
                 case R.id.mypagebtn:
-                    Intent intent_mypage = new Intent(v.getContext(), Signup.class); //바꾸기 (mypage 창으로)
+                    Intent intent_mypage = new Intent(v.getContext(), mypage.class); //바꾸기 (mypage 창으로)
                     startActivity(intent_mypage);
                     break;
             }
