@@ -65,7 +65,20 @@ public class ahhyun_login extends AppCompatActivity
             public void onClick(View view) {
                 String userEmail = email_edittext.getText().toString();
                 String userPassword = password_edittext.getText().toString();
-                signIn(userEmail, userPassword);
+                // 공백 없애기
+                userEmail = userEmail.trim();
+                userPassword = userPassword.trim();
+                if(userEmail.getBytes().length <= 0){
+                    Toast.makeText(ahhyun_login.this, "이메일을 입력해주십시오.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else if(userPassword.getBytes().length <= 0){
+                    Toast.makeText(ahhyun_login.this, "비밀번호를 입력해주십시오.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    signIn(userEmail, userPassword);
+                }
             }
         });
         /*
@@ -121,7 +134,7 @@ public class ahhyun_login extends AppCompatActivity
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            // If sign in fails, display a massage to the user.
+                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(ahhyun_login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
