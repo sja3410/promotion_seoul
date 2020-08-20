@@ -58,6 +58,8 @@ public class ahhyun_login extends AppCompatActivity
         email_edittext = findViewById(R.id.email_edittext);
         password_edittext = findViewById(R.id.password_edittext);
         emailSignInButton = findViewById(R.id.email_login_button);
+        mAuth = FirebaseAuth.getInstance();
+        // 이메일로 로그인 버튼이 클릭되었을 경우
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,7 +68,7 @@ public class ahhyun_login extends AppCompatActivity
                 signIn(userEmail, userPassword);
             }
         });
-        mAuth = FirebaseAuth.getInstance();
+        /*
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -79,6 +81,8 @@ public class ahhyun_login extends AppCompatActivity
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+
+         */
         if(mAuth.getCurrentUser() != null){
             Intent intent = new Intent(getApplication(), Post.class);
             startActivity(intent);
@@ -87,7 +91,6 @@ public class ahhyun_login extends AppCompatActivity
         text=(TextView)findViewById(R.id.signup_text);
         text.setOnClickListener(this);
     }
-
 
     private void updateUI(FirebaseUser user){
         if(user != null) {
@@ -112,7 +115,9 @@ public class ahhyun_login extends AppCompatActivity
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInwithEmail:success");
+                            Log.d(TAG, "signInWithEmail:success");
+                            Toast.makeText(ahhyun_login.this, "Authentication success.",
+                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
@@ -126,6 +131,7 @@ public class ahhyun_login extends AppCompatActivity
                 });
     }
 
+    // 사실상 안 쓰는 듯한 onActivityResult,, 하지만 혹시 모르니 일단 남겨두겠습니다.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
