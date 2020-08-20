@@ -23,6 +23,8 @@
         <activity android:name=".Signup"></activity>
         <activity android:name=".Post"></activity>
         <activity android:name=".mypage"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".profile_picture"></activity>
     </application>
 
 </manifest>
