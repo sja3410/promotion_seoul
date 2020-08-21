@@ -14,32 +14,22 @@
         <TextView
 
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-
             android:text="프로필 사진"
-
             android:layout_marginTop="20dp"
-
             android:textSize="40sp"
-
             android:gravity="center_horizontal"
  />
 
         <TextView
 
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-
             android:text="사진 한 장을 골라주세요!"
-
             android:textSize="20sp"
-
             android:gravity="center_horizontal"/>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -49,23 +39,15 @@
             >
 
             <ImageView
-
                 android:id="@+id/user_image"
-
                 android:layout_width="200dp"
-
                 android:layout_height="200dp"
-
                 android:layout_gravity="center"
-
                 android:maxWidth="200dp"
-
                 android:maxHeight="200dp"
-
                 android:adjustViewBounds="true"
-
-
-                android:onClick="onClick"/>
+                android:onClick="onClick"
+                android:src = "@mipmap/user"/>
 
             <Button
 

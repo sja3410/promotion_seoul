@@ -3,6 +3,10 @@
     package="com.example.myapplication">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera2"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +29,17 @@
         <activity android:name=".mypage"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".profile_picture"></activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.myapplication;"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name = "android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
+
     </application>
 
 </manifest>
