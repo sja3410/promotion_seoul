@@ -16,13 +16,8 @@ import android.widget.Toast;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.ahhyun_signup;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Response;
@@ -33,12 +28,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class ahhyun_login extends AppCompatActivity
@@ -63,11 +52,8 @@ public class ahhyun_login extends AppCompatActivity
         emailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userEmail = email_edittext.getText().toString();
-                String userPassword = password_edittext.getText().toString();
-                // 공백 없애기
-                userEmail = userEmail.trim();
-                userPassword = userPassword.trim();
+                String userEmail = email_edittext.getText().toString().trim();
+                String userPassword = password_edittext.getText().toString().trim();
                 if(userEmail.getBytes().length <= 0){
                     Toast.makeText(ahhyun_login.this, "이메일을 입력해주십시오.",
                             Toast.LENGTH_SHORT).show();
@@ -77,6 +63,8 @@ public class ahhyun_login extends AppCompatActivity
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    Toast.makeText(ahhyun_login.this, userEmail + ' ' + userPassword,
+                            Toast.LENGTH_SHORT).show();
                     signIn(userEmail, userPassword);
                 }
             }
@@ -96,12 +84,7 @@ public class ahhyun_login extends AppCompatActivity
                 RC_SIGN_IN);
 
          */
-        if(mAuth.getCurrentUser() != null){
-            Intent intent = new Intent(getApplication(), Post.class);
-            startActivity(intent);
-            finish();
-        }
-        text=(TextView)findViewById(R.id.signup_text);
+        text = (TextView)findViewById(R.id.signup_text);
         text.setOnClickListener(this);
     }
 
@@ -129,37 +112,19 @@ public class ahhyun_login extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(ahhyun_login.this, "Authentication success.",
+                            Toast.makeText(ahhyun_login.this, "로그인 성공",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(ahhyun_login.this, "Authentication failed.",
+                            Toast.makeText(ahhyun_login.this, "로그인 실패",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
                 });
-    }
-
-    // 사실상 안 쓰는 듯한 onActivityResult,, 하지만 혹시 모르니 일단 남겨두겠습니다.
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == RC_SIGN_IN){
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if(resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            } else {
-                // Sign in failed.
-                Snackbar.make(findViewById(R.id.layout_login), "Sign in failed", Snackbar.LENGTH_SHORT).show();
-                updateUI(null);
-            }
-        }
     }
 
     @Override
