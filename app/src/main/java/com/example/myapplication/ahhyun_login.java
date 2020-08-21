@@ -93,7 +93,7 @@ public class ahhyun_login extends AppCompatActivity
             finish();
         }
     }
-/*
+
     @Override
     public void onStart(){
         super.onStart();
@@ -101,7 +101,7 @@ public class ahhyun_login extends AppCompatActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-*/
+
     private void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
