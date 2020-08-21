@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ahhyun_login">
+        <activity android:name=".Post">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,6 @@
         <activity android:name=".SignUpExample"></activity>
         <activity android:name=".Add_gallery"></activity>
         <activity android:name=".Signup"></activity>
-        <activity android:name=".Post"></activity>
         <activity android:name=".mypage"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".profile_picture"></activity>
