@@ -63,8 +63,6 @@ public class ahhyun_login extends AppCompatActivity
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(ahhyun_login.this, userEmail + ' ' + userPassword,
-                            Toast.LENGTH_SHORT).show();
                     signIn(userEmail, userPassword);
                 }
             }
@@ -95,7 +93,7 @@ public class ahhyun_login extends AppCompatActivity
             finish();
         }
     }
-
+/*
     @Override
     public void onStart(){
         super.onStart();
@@ -103,7 +101,7 @@ public class ahhyun_login extends AppCompatActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-
+*/
     private void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
