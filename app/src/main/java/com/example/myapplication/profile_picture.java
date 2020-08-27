@@ -45,10 +45,10 @@ public class profile_picture extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_photo);
-        btn_camera= findViewById(R.id.btn_UploadPicture);
+       // btn_camera= findViewById(R.id.btn_UploadPicture);
         btn_camera1=findViewById(R.id.btn_signupfinish);
         img_user = findViewById(R.id.user_image);
-        btn_camera.setOnClickListener(new View.OnClickListener(){
+        img_user.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 int permission = ContextCompat.checkSelfPermission(profile_picture.this, Manifest.permission.CAMERA);
