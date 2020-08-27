@@ -1,12 +1,17 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -92,10 +98,33 @@ public class profile_picture extends AppCompatActivity {
                     }
                 });
                 pop.show();
-                //checkPermission();
+                checkPermission();
             }
         });
     }
+    private void checkPermission() {
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            if((ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE))||
+                    (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CAMERA))){
+                new AlertDialog.Builder(this).setTitle("알림").setMessage("저장소 권한이 거부되었습니다.").setNeutralButton("설정", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(Uri.parse("package: " + getPackageName()));
+                        startActivity(intent);
+                    }
+                }).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).setCancelable(false).create().show();
+            }else{
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, MY_PERMISSION_CAMERA);
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -157,6 +186,48 @@ public class profile_picture extends AppCompatActivity {
         mCurrentPhotoPath = imageFile.getAbsolutePath();
         return imageFile;
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_TAKE_PHOTO:
+                if(resultCode == Activity.RESULT_OK){
+                    try{
+                        Log.i("REQUEST_TAKE_PHOTO","OK!!!!!!");
+                        galleryAddPic();
+
+                        img_user.setImageURI(imageURI);
+                    }catch(Exception e){
+                        Log.e("REQUEST_TAKE_PHOTO",e.toString());
+                    }
+                }else{
+                    Toast.makeText(profile_picture.this,"저장공간에 접근할 수 없는 기기 입니다.",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_TAKE_ALBUM:
+                if(resultCode == Activity.RESULT_OK){
+                    if(data.getData() != null){
+                        try {
+                            File albumFile = null;
+                            albumFile = createImageFile();
+                            photoURI = data.getData();
+                            albumURI = Uri.fromFile(albumFile);
+                            cropImage();
+                        } catch (IOException e) {
+                            Log.e("TAKE_ALBUM_SINLE_ERROR",e.toString());
+                        }
+                    }
+                }
+                break;
+            case REQUEST_IMAGE_CROP:
+                if(resultCode == Activity.RESULT_OK){
+                    galleryAddPic();
+                    //사진 변환 error
+                    img_user.setImageURI(albumURI);
+                }
+                break;
+        }
+    }
     private void getAlbum() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -181,7 +252,8 @@ public class profile_picture extends AppCompatActivity {
         Uri contentURI = Uri.fromFile(file);
         mediaScanIntent.setData(contentURI);
         sendBroadcast(mediaScanIntent);
-        Toast.makeText(this,"앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
+
 
 }
