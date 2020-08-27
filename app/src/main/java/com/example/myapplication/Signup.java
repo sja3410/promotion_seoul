@@ -17,14 +17,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Signup extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAnalytics mFirebaseAnalytics;
     private static final String TAG = "Signup";
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hyeji_signup);
-        mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.signup_button).setOnClickListener(onClickListener);
     }
     @Override
@@ -65,29 +64,38 @@ public class Signup extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.passwordsignup)).getText().toString();
         String re_password = ((EditText) findViewById(R.id.repasswordsignup)).getText().toString();
 
-        if (!username.isEmpty())
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    startToast("정상적으로 회원가입 되었습니다.");
+                } else {
+                    startToast("시스템 오류");
+                }
+            }
+        });
+
+     /*   if (!username.isEmpty())
         {
             if (email.contains("@")  && (email.contains("naver.com") || email.contains("gmail.com"))) {
                 if (password.equals(re_password) ) {
                     if (password.length() >= 6) { // 비밀번호 6자리
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             // Sign in success, update UI with the signed-in user's information
-                                            FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
-                                            updateUI(user);
+                                            //FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
+                                            //updateUI(user);
                                             startToast("정상적으로 회원가입 되었습니다.");
                                             Log.d(TAG, "createUserWithEmail:success");
                                         } else {
-                                            updateUI(null);
+                                           // updateUI(null);
                                             startToast("시스템 오류.");
-                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-
+                                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                         }
                                     }
-                                });
+                        });
                         //startToast("정상적으로 회원가입 되었습니다.");
                         return true;
                     }
@@ -107,12 +115,12 @@ public class Signup extends AppCompatActivity {
         }
         else {
             startToast("사용자 이름을 입력해주십시오");
-        }
+        }*/
         return false;
     }
 
     private void startToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
 
