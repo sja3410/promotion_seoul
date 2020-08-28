@@ -19,6 +19,10 @@ public class Post extends AppCompatActivity {
         @Override
         public void onClick(View v){
             switch(v.getId()){
+                case R.id.search_button:
+                    Intent intent_search = new Intent(v.getContext(), search.class);
+                    startActivity(intent_search);
+
                 case R.id.postadd:
                     Intent intent_post = new Intent(v.getContext(), Add_gallery.class); //바꾸기 (사진 추가하는 창으로)
                     startActivity(intent_post);
