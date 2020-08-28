@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +28,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -38,7 +46,7 @@ import static android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE;
 public class profile_picture extends AppCompatActivity {
     private static final String TAG = "profile_picture";
     Button btn_camera;
-    Button btn_camera1;
+    Button btn_finish;
     ImageView img_user;
 
     @Override
@@ -46,7 +54,7 @@ public class profile_picture extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_photo);
        // btn_camera= findViewById(R.id.btn_UploadPicture);
-        btn_camera1=findViewById(R.id.btn_signupfinish);
+        btn_finish =findViewById(R.id.btn_signupfinish);
         img_user = findViewById(R.id.user_image);
         img_user.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -59,6 +67,12 @@ public class profile_picture extends AppCompatActivity {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, 1);
                 }
+            }
+        });
+        btn_finish.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                uploadFile();
             }
         });
     }
@@ -187,16 +201,16 @@ public class profile_picture extends AppCompatActivity {
         return imageFile;
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { // 데이터베이스 넣기!!
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            case REQUEST_TAKE_PHOTO:
+            case REQUEST_TAKE_PHOTO: // 카메라로 이동
                 if(resultCode == Activity.RESULT_OK){
                     try{
                         Log.i("REQUEST_TAKE_PHOTO","OK!!!!!!");
-                        galleryAddPic();
+                        galleryAddPic(); // 갤러리에 사진 추가
 
-                        img_user.setImageURI(imageURI);
+                        img_user.setImageURI(imageURI); // 이미지 변경하기
                     }catch(Exception e){
                         Log.e("REQUEST_TAKE_PHOTO",e.toString());
                     }
@@ -204,7 +218,7 @@ public class profile_picture extends AppCompatActivity {
                     Toast.makeText(profile_picture.this,"저장공간에 접근할 수 없는 기기 입니다.",Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case REQUEST_TAKE_ALBUM:
+            case REQUEST_TAKE_ALBUM: // 갤러리로 이동
                 if(resultCode == Activity.RESULT_OK){
                     if(data.getData() != null){
                         try {
@@ -219,7 +233,7 @@ public class profile_picture extends AppCompatActivity {
                     }
                 }
                 break;
-            case REQUEST_IMAGE_CROP:
+            case REQUEST_IMAGE_CROP: // 이미지 사진 크기 변경
                 if(resultCode == Activity.RESULT_OK){
                     galleryAddPic();
                     //사진 변환 error
@@ -253,6 +267,47 @@ public class profile_picture extends AppCompatActivity {
         mediaScanIntent.setData(contentURI);
         sendBroadcast(mediaScanIntent);
         Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+    private void uploadFile(){
+        if(photoURI != null){
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.show();
+
+            //storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            Date now = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+            String filename = formatter.format(now)+".jpg";
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("images/"+filename);
+            storageRef.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
+                    Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show();
+                }
+            })
+                    //실패시
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "업로드 실패!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    //진행중
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
+                            //dialog에 진행률을 퍼센트로 출력해 준다
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
