@@ -11,6 +11,7 @@ public class Post extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hyeji_post);
+        findViewById(R.id.search_button).setOnClickListener(onClickListener);
         findViewById(R.id.postadd).setOnClickListener(onClickListener);
         findViewById(R.id.mypagebtn).setOnClickListener(onClickListener);
     }
