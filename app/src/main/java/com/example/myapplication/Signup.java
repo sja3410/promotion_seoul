@@ -15,11 +15,14 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAnalytics mFirebaseAnalytics;
     private static final String TAG = "Signup";
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -39,10 +42,12 @@ public class Signup extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.signup_button:
                     if(signUp()==true) {
+                        initprofile(mAuth.getUid());
                         Intent intent_profile = new Intent(v.getContext(), ahhyun_login.class);
                         //            boolean signupSuccess = signUp();
                         //           if (signupSuccess == true)
                         startActivity(intent_profile);
+
                     }
                     break;
 
@@ -123,5 +128,17 @@ public class Signup extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
+    private void initprofile(String userID)
+    {
+        String email = ((EditText) findViewById(R.id.idsignup)).getText().toString();
+        String username = ((EditText) findViewById(R.id.username)).getText().toString();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Profile").child(userID).child("username").setValue(username);
+        mDatabase.child("Profile").child(userID).child("follower").setValue(0);
+        mDatabase.child("Profile").child(userID).child("following").setValue(0);
+        mDatabase.child("Profile").child(userID).child("memo").setValue("");
+        mDatabase.child("Profile").child(userID).child("id").setValue(email);
+
+    }
 
 }
