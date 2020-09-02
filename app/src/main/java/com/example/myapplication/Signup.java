@@ -39,7 +39,7 @@ public class Signup extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.signup_button:
                     if(signUp()==true) {
-                        Intent intent_profile = new Intent(v.getContext(), SignUpExample.class);
+                        Intent intent_profile = new Intent(v.getContext(), ahhyun_login.class);
                         //            boolean signupSuccess = signUp();
                         //           if (signupSuccess == true)
                         startActivity(intent_profile);
@@ -64,7 +64,7 @@ public class Signup extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.passwordsignup)).getText().toString();
         String re_password = ((EditText) findViewById(R.id.repasswordsignup)).getText().toString();
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        /*mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -73,9 +73,9 @@ public class Signup extends AppCompatActivity {
                     startToast("시스템 오류");
                 }
             }
-        });
+        });*/
 
-     /*   if (!username.isEmpty())
+        if (!username.isEmpty())
         {
             if (email.contains("@")  && (email.contains("naver.com") || email.contains("gmail.com"))) {
                 if (password.equals(re_password) ) {
@@ -115,7 +115,7 @@ public class Signup extends AppCompatActivity {
         }
         else {
             startToast("사용자 이름을 입력해주십시오");
-        }*/
+        }
         return false;
     }
 

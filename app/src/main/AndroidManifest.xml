@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".search"></activity>
-        <activity android:name=".ahhyun_login">
+        <activity android:name=".Signup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".Post" />
         <activity android:name=".ahhyun_signup" />
-        <activity android:name=".SignUpExample" />
+        <activity android:name=".ahhyun_login" />
         <activity android:name=".Add_gallery" />
         <activity android:name=".mypage" />
         <activity android:name=".MainActivity" />
