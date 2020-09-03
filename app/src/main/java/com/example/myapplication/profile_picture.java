@@ -30,6 +30,9 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -48,6 +51,8 @@ public class profile_picture extends AppCompatActivity {
     Button btn_camera;
     Button btn_finish;
     ImageView img_user;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +284,8 @@ public class profile_picture extends AppCompatActivity {
             Date now = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
             String filename = formatter.format(now)+".jpg";
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("Profile").child(mAuth.getUid()).child("profile_img").setValue(filename);
             StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("images/"+filename);
             storageRef.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
