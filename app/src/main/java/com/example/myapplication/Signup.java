@@ -138,6 +138,8 @@ public class Signup extends AppCompatActivity {
         mDatabase.child("Profile").child(userID).child("following").setValue(0);
         mDatabase.child("Profile").child(userID).child("memo").setValue("");
         mDatabase.child("Profile").child(userID).child("id").setValue(email);
+        mDatabase.child("Profile").child(userID).child("profile_img").setValue("");
+
 
     }
 
