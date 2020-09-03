@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
@@ -17,10 +19,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAnalytics mFirebaseAnalytics;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "Signup";
     private DatabaseReference mDatabase;
     @Override
@@ -44,10 +53,7 @@ public class Signup extends AppCompatActivity {
                     if(signUp()==true) {
                         initprofile(mAuth.getUid());
                         Intent intent_profile = new Intent(v.getContext(), ahhyun_login.class);
-                        //            boolean signupSuccess = signUp();
-                        //           if (signupSuccess == true)
                         startActivity(intent_profile);
-
                     }
                     break;
 
@@ -132,15 +138,32 @@ public class Signup extends AppCompatActivity {
     {
         String email = ((EditText) findViewById(R.id.idsignup)).getText().toString();
         String username = ((EditText) findViewById(R.id.username)).getText().toString();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("Profile").child(userID).child("username").setValue(username);
-        mDatabase.child("Profile").child(userID).child("follower").setValue(0);
-        mDatabase.child("Profile").child(userID).child("following").setValue(0);
-        mDatabase.child("Profile").child(userID).child("memo").setValue("");
-        mDatabase.child("Profile").child(userID).child("id").setValue(email);
-        mDatabase.child("Profile").child(userID).child("profile_img").setValue("");
+        Map<String, Object> user = new HashMap<>();
+        user.put("username", username);
+        user.put("follower", 0);
+        user.put("following", 0);
+        user.put("memo", "");
+        user.put("posting", 0);
+        user.put("id", email);
+        user.put("profile_img", "");
 
 
+        db.collection("Profile").document(userID).set(user, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startToast("회원정보 저장 완료");
+                        //회원정보가 설정되어있음을 확인
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+//                        startToast("회원정보 저장 실패");
+                        Log.w(TAG, "Error adding document", e);//회원정보가 설정되어있음을 확인
+                    }
+                });
     }
 
 }

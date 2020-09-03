@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -42,6 +44,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE;
 
@@ -284,8 +288,11 @@ public class profile_picture extends AppCompatActivity {
             Date now = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
             String filename = formatter.format(now)+".jpg";
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("Profile").child(mAuth.getUid()).child("profile_img").setValue(filename);
+            Map<String, Object> user = new HashMap<>();
+            user.put("profile_img", filename);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Profile").document(mAuth.getUid())
+                    .set(user,SetOptions.merge());
             StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("images/"+filename);
             storageRef.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
