@@ -8,31 +8,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/btn_search"/>
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <EditText
             android:id="@+id/search_edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/search_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+            android:layout_height="wrap_content" />
 
         <ListView
             android:id="@+id/search_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:divider="#999999"
+            android:dividerHeight="1dp">
         </ListView>
-    </ScrollView>
-
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
