@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,9 @@ public class mypage extends AppCompatActivity {
         setContentView(R.layout.mypage);
         findViewById(R.id.profile_change).setOnClickListener(onClickListener);
         getUsername();
+        get_post();
+        get_follower();
+        get_following();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -55,7 +59,43 @@ public class mypage extends AppCompatActivity {
         });
     }
 
+    public void get_post() {
+        user_posting = findViewById(R.id.gesi);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                Integer post = document.getLong("posting").intValue();
 
+                user_posting.setText("게시물\n"+post.toString());
+            }
+        });
+    }
+
+    public void get_follower(){
+        user_follower = findViewById(R.id.follower);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                Integer follower = document.getLong("follower").intValue();
+
+                user_follower.setText("팔로워\n"+follower.toString());
+            }
+        });
+    }
+    public void get_following(){
+        user_following = findViewById(R.id.following);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                Integer following = document.getLong("following").intValue();
+
+                user_following.setText("팔로잉\n"+following.toString());
+            }
+        });
+    }
 
 
 }
