@@ -18,16 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".search"></activity>
-        <activity android:name=".Signup">
+        <activity android:name=".Signup"></activity>
+        <activity android:name=".Post" />
+        <activity android:name=".ahhyun_signup" />
+        <activity android:name=".ahhyun_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Post" />
-        <activity android:name=".ahhyun_signup" />
-        <activity android:name=".ahhyun_login" />
         <activity android:name=".Add_gallery" />
         <activity android:name=".mypage" />
         <activity android:name=".MainActivity" />
