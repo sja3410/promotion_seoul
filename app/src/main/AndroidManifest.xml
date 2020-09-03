@@ -18,10 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".search"></activity>
-        <activity android:name=".ahhyun_login"></activity>
+        <activity android:name=".Signup"></activity>
         <activity android:name=".Post" />
         <activity android:name=".ahhyun_signup" />
-        <activity android:name=".Signup">
+        <activity android:name=".ahhyun_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
