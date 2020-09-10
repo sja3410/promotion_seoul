@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.LauncherActivity;
@@ -7,17 +8,32 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class search extends AppCompatActivity {
@@ -28,6 +44,11 @@ public class search extends AppCompatActivity {
     private SearchAdapter adapter;  // 리스트뷰에 연결할 어댑터
     private ArrayList<String> arrayList;
 
+    // Cloud Firestore 인스턴스를 액티비티로 가져옴
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference usersCollectionRef = db.collection("Profile");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +57,18 @@ public class search extends AppCompatActivity {
         search_edittext = (EditText) findViewById(R.id.search_edittext);
         search_listView = (ListView) findViewById(R.id.search_list_view);
 
+        FirebaseFirestoreSettings.Builder settings = new FirebaseFirestoreSettings.Builder();
+        settings.setTimestampsInSnapshotsEnabled(true);
+        db.setFirestoreSettings(settings.build());
+
         // 리스트 생성
         list = new ArrayList<String>();
 
         // 데이터베이스에서 사용자의 정보 가져와서 저장
         settingList();
+        list.add("이아현");
+        list.add("현아");
+        list.add("http");
 
         // 리스트의 모든 데이터를 arrayList에 복사
         arrayList = new ArrayList<String>();
@@ -70,6 +98,14 @@ public class search extends AppCompatActivity {
                 search_person(searchText);
             }
         });
+
+        search_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 해당 유저의 페이지로 이동
+                // 유저 페이지 만들고 나서 채우기
+            }
+        });
     }
 
     public void search_person(String Text){
@@ -80,6 +116,7 @@ public class search extends AppCompatActivity {
             list.addAll(arrayList);
         } else {
             for (int i = 0; i < arrayList.size(); i++) {
+                Text = Text.toLowerCase();
                 if (arrayList.get(i).toLowerCase().contains(Text)) {
                     list.add(arrayList.get(i));
                 }
@@ -90,9 +127,19 @@ public class search extends AppCompatActivity {
     }
 
     private void settingList() {
-        list.add("안선정");
-        list.add("이아현");
-        list.add("임혜지");
+        usersCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        Map map = document.getData();
+                        String username = map.get("username").toString();
+                        // Toast.makeText(getApplicationContext(), username, Toast.LENGTH_SHORT).show();
+                        list.add(username);
+                    }
+                }
+            }
+        });
     }
 }
 
