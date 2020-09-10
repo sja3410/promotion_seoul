@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.6"
-                android:text="user name"
+                android:id = "@+id/write_username"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"/>
             <Button
