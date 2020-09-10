@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop = "5dp"
+            android:layout_marginBottom="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize = "20dp"
+            android:layout_marginLeft="10dp"
+            android:text = "user_name"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="370dp"
+        android:background="#FFF000"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="15dp"
+            android:background="#F12312"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "#category"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize = "25dp"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
