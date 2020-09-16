@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ import java.util.Map;
 public class search extends AppCompatActivity {
 
     private EditText search_edittext;
-    private List<String> list;  // 데이터를 넣을 리스트변수
+    private List list;  // 데이터를 넣을 리스트변수
     private ListView search_listView;  // 검색을 보여줄 리스트변수
     private SearchAdapter adapter;  // 리스트뷰에 연결할 어댑터
     private ArrayList<String> arrayList;
@@ -58,44 +59,28 @@ public class search extends AppCompatActivity {
         search_listView = (ListView) findViewById(R.id.search_list_view);
 
         FirebaseFirestoreSettings.Builder settings = new FirebaseFirestoreSettings.Builder();
-        settings.setTimestampsInSnapshotsEnabled(true);
+        //settings.setTimestampsInSnapshotsEnabled(true);
         db.setFirestoreSettings(settings.build());
 
         // 리스트 생성
-        list = new ArrayList<String>();
-
-        // 데이터베이스에서 사용자의 정보 가져와서 저장
-        settingList();
-        list.add("이아현");
-        list.add("현아");
-        list.add("http");
-
-        // 리스트의 모든 데이터를 arrayList에 복사
-        arrayList = new ArrayList<String>();
-        arrayList.addAll(list);
-
-        // 리스트에 연동할 어댑터 생성
-        adapter = new SearchAdapter(list, this);
-
-        // 리스트뷰에 어댑터 연결
-        search_listView.setAdapter(adapter);
+        list = new ArrayList<Object>();
 
         // 검색어 입력 이벤트 리스너
         search_edittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                //settingList(charSequence.toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 String searchText = search_edittext.getText().toString();
-                search_person(searchText);
+                settingList(searchText);
+                list.clear();
             }
         });
 
@@ -108,38 +93,34 @@ public class search extends AppCompatActivity {
         });
     }
 
-    public void search_person(String Text){
-        // 입력 초기화
+
+    private void settingList(final String text) {
         list.clear();
-
-        if(Text.length() == 0){
-            list.addAll(arrayList);
-        } else {
-            for (int i = 0; i < arrayList.size(); i++) {
-                Text = Text.toLowerCase();
-                if (arrayList.get(i).toLowerCase().contains(Text)) {
-                    list.add(arrayList.get(i));
-                }
-            }
-        }
-        // 어댑터 갱신
-        adapter.notifyDataSetChanged();
-    }
-
-    private void settingList() {
         usersCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
                     for(QueryDocumentSnapshot document : task.getResult()) {
-                        Map map = document.getData();
-                        String username = map.get("username").toString();
-                        // Toast.makeText(getApplicationContext(), username, Toast.LENGTH_SHORT).show();
-                        list.add(username);
+                        HashMap<String, Object> map = new HashMap<String, Object>();
+                        String username = document.getString("username");
+                        if(username.contains(text)) {
+                            map.put("userName", username);
+                            //map.put("userId", document.getId());
+                            list.add(map);
+                        }
                     }
                 }
+                show(list);
             }
         });
+    }
+    public void show(List list)
+    {
+
+        String[] keys = new String[]{"userName"};
+        int[] ids = new int[]{R.id.search_list_view};
+        SimpleAdapter customAdapter = new SimpleAdapter(this, list, R.layout.activity_search, keys, ids);
+        search_listView.setAdapter(customAdapter);
     }
 }
 
