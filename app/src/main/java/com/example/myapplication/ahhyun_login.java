@@ -89,6 +89,8 @@ public class ahhyun_login extends AppCompatActivity
     private void updateUI(FirebaseUser user){
         if(user != null) {
             Intent intent = new Intent(this, Post.class);
+            startToast(user.getUid());
+            intent.putExtra("uid",user.getUid().toString());
             startActivity(intent);
             finish();
         }
@@ -135,4 +137,8 @@ public class ahhyun_login extends AppCompatActivity
                 startActivity(intent);
         }
     }
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
 }
