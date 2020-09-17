@@ -116,11 +116,14 @@ public class search extends AppCompatActivity {
     }
     public void show(List list)
     {
-
         String[] keys = new String[]{"userName"};
-        int[] ids = new int[]{R.id.search_list_view};
-        SimpleAdapter customAdapter = new SimpleAdapter(this, list, R.layout.activity_search, keys, ids);
+        int[] ids = new int[]{R.id.username};
+        SimpleAdapter customAdapter = new SimpleAdapter(this, list, R.layout.layout, keys, ids);
         search_listView.setAdapter(customAdapter);
+        startToast(ids.toString());
+    }
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
 
