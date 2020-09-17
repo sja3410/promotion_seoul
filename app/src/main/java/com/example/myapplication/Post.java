@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Post extends AppCompatActivity {
+    String uid;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -14,6 +15,8 @@ public class Post extends AppCompatActivity {
         findViewById(R.id.search_button).setOnClickListener(onClickListener);
         findViewById(R.id.postadd).setOnClickListener(onClickListener);
         findViewById(R.id.mypagebtn).setOnClickListener(onClickListener);
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener(){
@@ -31,7 +34,9 @@ public class Post extends AppCompatActivity {
                     break;
                 case R.id.mypagebtn:
                     Intent intent_mypage = new Intent(v.getContext(), mypage.class); //바꾸기 (mypage 창으로)
+                    intent_mypage.putExtra("uid",uid);
                     startActivity(intent_mypage);
+
                     break;
             }
         }

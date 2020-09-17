@@ -74,13 +74,13 @@
                 android:layout_weight="1.6"
                 android:id = "@+id/write_username"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"/>
+                />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="프로필 수정"
-                android:layout_margin="10dp"
+
                 android:id = "@+id/profile_change"/>
             <TextView
                 android:layout_width="match_parent"

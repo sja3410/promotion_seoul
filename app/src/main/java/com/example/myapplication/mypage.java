@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class mypage extends AppCompatActivity {
@@ -27,19 +29,22 @@ public class mypage extends AppCompatActivity {
     TextView user_follower;
     TextView user_posting;
     TextView user_following;
-   /* FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference docRef = db.collection("Profile").document(user.getUid());*/
+    String uid;
+    /* FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+     FirebaseFirestore db = FirebaseFirestore.getInstance();
+     DocumentReference docRef = db.collection("Profile").document(user.getUid());*/
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersCollectionRef = db.collection("Profile");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mypage);
         findViewById(R.id.profile_change).setOnClickListener(onClickListener);
         user_name = findViewById(R.id.user);
         write_user = findViewById(R.id.write_username);
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
         getUsername();
     }
 
@@ -55,13 +60,28 @@ public class mypage extends AppCompatActivity {
         }
     };
 
-    public void getUsername(){
+    public void getUsername() {
         user_name = findViewById(R.id.user);
         write_user = findViewById(R.id.write_username);
         user_posting = findViewById(R.id.gesi);
         user_follower = findViewById(R.id.follower);
         user_following = findViewById(R.id.following);
-        usersCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //startToast(uid);
+        usersCollectionRef.document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                user_name.setText(document.getString("username"));
+                startToast(document.getString("username"));
+                user_posting.setText(document.get("posting") + "\n" + "게시물");
+                user_follower.setText(document.get("follower") + "\n" + "팔로워");
+                user_following.setText(document.get("following") + "\n" + "팔로잉");
+            }
+        });
+
+
+       // Map map = usersCollectionRef.document(uid).get(username).toString();
+       /* usersCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -72,13 +92,17 @@ public class mypage extends AppCompatActivity {
                     String following = map.get("following").toString();
                     user_name.setText(user);
                     write_user.setText(user);
-                    user_posting.setText(post +"\n"+ "게시물");
-                    user_follower.setText(follower+"\n"+"팔로워");
+                    user_posting.setText(post + "\n" + "게시물");
+                    user_follower.setText(follower + "\n" + "팔로워");
                     user_following.setText(following + "\n" + "팔로잉");
                 }
             }
         });
+    }*/
+
+
     }
+
 
    /* public void get_post() {
         user_posting = findViewById(R.id.gesi);
@@ -117,6 +141,9 @@ public class mypage extends AppCompatActivity {
             }
         });
     }*/
+   private void startToast(String msg) {
+       Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+   }
 
 
 }
