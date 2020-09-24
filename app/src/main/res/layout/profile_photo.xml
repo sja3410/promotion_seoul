@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="프로필 사진"
             android:layout_marginTop="20dp"
-            android:textSize="40sp"
+            android:textSize="30sp"
             android:gravity="center_horizontal"
  />
 
@@ -25,7 +25,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사진 한 장을 골라주세요!"
+            android:text="변경하기"
             android:textSize="20sp"
             android:gravity="center_horizontal"/>
 
@@ -47,7 +47,12 @@
                 android:maxHeight="200dp"
                 android:adjustViewBounds="true"
                 android:onClick="onClick"
-                android:src = "@mipmap/user"/>
+                android:src = "@mipmap/user"
+                />
+
+
+
+
 
 
         </LinearLayout>
@@ -62,6 +67,53 @@
 
 
         </LinearLayout>
+        <EditText
+            android:layout_marginTop="30dp"
+            android:id="@+id/idsignup"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+
+            android:background="@drawable/rectangle"
+            android:hint="  이메일"
+            android:inputType="text">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rectangle"
+            android:hint="  사용자이름"
+            android:inputType="text">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/passwordsignup"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rectangle"
+            android:hint="  비밀번호"
+            android:inputType="textPassword">
+        </EditText>
+
+        <EditText
+            android:id="@+id/repasswordsignup"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rectangle"
+            android:hint="  비밀번호 확인"
+            android:inputType="textPassword">
+
+        </EditText>
 
 
         <Button
@@ -76,7 +128,7 @@
 
             android:id="@+id/btn_signupfinish"
 
-            android:text="사진 선택 완료"
+            android:text="정보 변경 완료"
 
 
             android:onClick="onClick"/>
