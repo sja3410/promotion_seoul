@@ -92,17 +92,17 @@ public class Signup extends AppCompatActivity {
                 if (password.equals(re_password) ) {
                     if (password.length() >= 6) { // 비밀번호 6자리
                         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            startToast("정상적으로 회원가입 되었습니다.");
-                                            Log.d(TAG, "createUserWithEmail:success");
-                                        } else {
-                                           // updateUI(null);
-                                            startToast("시스템 오류.");
-                                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                        }
-                                    }
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    startToast("정상적으로 회원가입 되었습니다.");
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                } else {
+                                    // updateUI(null);
+                                    startToast("시스템 오류.");
+                                    //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                }
+                            }
                         });
                         //startToast("정상적으로 회원가입 되었습니다.");
                         return true;
