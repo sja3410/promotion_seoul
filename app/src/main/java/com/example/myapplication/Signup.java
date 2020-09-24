@@ -51,7 +51,8 @@ public class Signup extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.signup_button:
                     if(signUp()==true) {
-                        initprofile(mAuth.getUid());
+                        String get_uid = mAuth.getUid();
+                        initprofile(get_uid);
                         Intent intent_profile = new Intent(v.getContext(), ahhyun_login.class);
                         startActivity(intent_profile);
                     }

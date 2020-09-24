@@ -62,7 +62,7 @@ public class profile_picture extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_photo);
-       // btn_camera= findViewById(R.id.btn_UploadPicture);
+        // btn_camera= findViewById(R.id.btn_UploadPicture);
         btn_finish =findViewById(R.id.btn_signupfinish);
         img_user = findViewById(R.id.user_image);
         img_user.setOnClickListener(new View.OnClickListener(){
@@ -293,7 +293,7 @@ public class profile_picture extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Profile").document(mAuth.getUid())
                     .set(user,SetOptions.merge());
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("images/"+filename);
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("profile_img/"+filename);
             storageRef.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
