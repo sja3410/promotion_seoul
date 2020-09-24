@@ -29,7 +29,7 @@ import java.util.Map;
 public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAnalytics mFirebaseAnalytics;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Map<String, Object> user = new HashMap<>();
     private static final String TAG = "Signup";
     private DatabaseReference mDatabase;
     @Override
@@ -51,7 +51,9 @@ public class Signup extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.signup_button:
                     if(signUp()==true) {
-                        initprofile(mAuth.getUid());
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Profile").document(mAuth.getUid())
+                                .set(user,SetOptions.merge());
                         Intent intent_profile = new Intent(v.getContext(), ahhyun_login.class);
                         startActivity(intent_profile);
                     }
@@ -75,16 +77,14 @@ public class Signup extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.passwordsignup)).getText().toString();
         String re_password = ((EditText) findViewById(R.id.repasswordsignup)).getText().toString();
 
-        /*mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    startToast("정상적으로 회원가입 되었습니다.");
-                } else {
-                    startToast("시스템 오류");
-                }
-            }
-        });*/
+        user.put("username", username);
+        user.put("follower", 0);
+        user.put("following", 0);
+        user.put("memo", "");
+        user.put("posting", 0);
+        user.put("id", email);
+        user.put("profile_img", "");
+        user.put("name", "");
 
         if (!username.isEmpty())
         {
@@ -95,9 +95,6 @@ public class Signup extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
-                                            //FirebaseUser user = mAuth.getCurrentUser(); // 로그인 성공
-                                            //updateUI(user);
                                             startToast("정상적으로 회원가입 되었습니다.");
                                             Log.d(TAG, "createUserWithEmail:success");
                                         } else {
@@ -134,36 +131,6 @@ public class Signup extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    private void initprofile(String userID)
-    {
-        String email = ((EditText) findViewById(R.id.idsignup)).getText().toString();
-        String username = ((EditText) findViewById(R.id.username)).getText().toString();
-        Map<String, Object> user = new HashMap<>();
-        user.put("username", username);
-        user.put("follower", 0);
-        user.put("following", 0);
-        user.put("memo", "");
-        user.put("posting", 0);
-        user.put("id", email);
-        user.put("profile_img", "");
 
-
-        db.collection("Profile").document(userID).set(user, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        startToast("회원정보 저장 완료");
-                        //회원정보가 설정되어있음을 확인
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-//                        startToast("회원정보 저장 실패");
-                        Log.w(TAG, "Error adding document", e);//회원정보가 설정되어있음을 확인
-                    }
-                });
-    }
 
 }
