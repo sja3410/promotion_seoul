@@ -17,8 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,12 +30,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -54,9 +64,20 @@ public class profile_picture extends AppCompatActivity {
     private static final String TAG = "profile_picture";
     Button btn_camera;
     Button btn_finish;
+    Button btn_UploadPicture;
     ImageView img_user;
+    EditText name;
+    EditText username;
+    EditText email;
+    EditText memo;
+    String uid;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //FirebaseUser user = mAuth.getCurrentUser();
+    CollectionReference usersCollectionRef = db.collection("Profile");
+    DocumentReference docRef = db.collection("Profile").document(user.getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +85,10 @@ public class profile_picture extends AppCompatActivity {
         setContentView(R.layout.profile_photo);
         // btn_camera= findViewById(R.id.btn_UploadPicture);
         btn_finish =findViewById(R.id.btn_signupfinish);
+        btn_UploadPicture = findViewById(R.id.btn_UploadPicture);
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
+        getProfile(); // 정보가져오기
         img_user = findViewById(R.id.user_image);
         img_user.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -78,10 +103,16 @@ public class profile_picture extends AppCompatActivity {
                 }
             }
         });
-        btn_finish.setOnClickListener(new View.OnClickListener(){
+        btn_UploadPicture.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 uploadFile();
+            }
+        });
+        btn_finish.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                  setProfile();
             }
         });
     }
@@ -124,6 +155,50 @@ public class profile_picture extends AppCompatActivity {
                 checkPermission();
             }
         });
+    }
+    public void getProfile() {
+        name = findViewById(R.id.name);
+        username = findViewById(R.id.username);
+        email = findViewById(R.id.email);
+        memo = findViewById(R.id.memo);
+        startToast(user.getUid());
+        usersCollectionRef.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                name.setText(document.getString("name"));
+                username.setText(document.getString("username"));
+                email.setText(document.getString("id"));
+                memo.setText(document.getString("memo"));
+            }
+        });
+    }
+
+    public void setProfile() {
+        String name = ((EditText) findViewById(R.id.name)).getText().toString();
+        String username = ((EditText) findViewById(R.id.username)).getText().toString();
+        String email = ((EditText) findViewById(R.id.email)).getText().toString();
+        String memo = ((EditText) findViewById(R.id.memo)).getText().toString();
+
+        Map<String, String> profile = new HashMap<>();
+        profile.put("name", name);
+        profile.put("username", username);
+        profile.put("id", email);
+        profile.put("memo", memo);
+        db.collection("Profile").document(user.getUid()).set(profile, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startToast("회원정보 저장 완료");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        startToast("회원정보 저장 실패");
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
     private void checkPermission() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
@@ -277,6 +352,8 @@ public class profile_picture extends AppCompatActivity {
         sendBroadcast(mediaScanIntent);
         Toast.makeText(this, "앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
+
+
     private void uploadFile(){
         if(photoURI != null){
             final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -322,6 +399,9 @@ public class profile_picture extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void startToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 
 

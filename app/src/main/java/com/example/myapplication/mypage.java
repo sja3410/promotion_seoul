@@ -54,6 +54,7 @@ public class mypage extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.profile_change:
                     Intent intent_picture = new Intent(v.getContext(), profile_picture.class);
+                    intent_picture.putExtra("uid",uid);
                     startActivity(intent_picture);
                     break;
             }
@@ -80,7 +81,7 @@ public class mypage extends AppCompatActivity {
         });
 
 
-       // Map map = usersCollectionRef.document(uid).get(username).toString();
+        // Map map = usersCollectionRef.document(uid).get(username).toString();
        /* usersCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -104,46 +105,46 @@ public class mypage extends AppCompatActivity {
     }
 
 
-   /* public void get_post() {
-        user_posting = findViewById(R.id.gesi);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                Integer post = document.getLong("posting").intValue();
+    /* public void get_post() {
+         user_posting = findViewById(R.id.gesi);
+         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+             @Override
+             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                 DocumentSnapshot document = task.getResult();
+                 Integer post = document.getLong("posting").intValue();
 
-                user_posting.setText("게시물\n"+post.toString());
-            }
-        });
+                 user_posting.setText("게시물\n"+post.toString());
+             }
+         });
+     }
+
+     public void get_follower(){
+         user_follower = findViewById(R.id.follower);
+         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+             @Override
+             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                 DocumentSnapshot document = task.getResult();
+                 Integer follower = document.getLong("follower").intValue();
+
+                 user_follower.setText("팔로워\n"+follower.toString());
+             }
+         });
+     }
+     public void get_following(){
+         user_following = findViewById(R.id.following);
+         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+             @Override
+             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                 DocumentSnapshot document = task.getResult();
+                 Integer following = document.getLong("following").intValue();
+
+                 user_following.setText("팔로잉\n"+following.toString());
+             }
+         });
+     }*/
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
-
-    public void get_follower(){
-        user_follower = findViewById(R.id.follower);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                Integer follower = document.getLong("follower").intValue();
-
-                user_follower.setText("팔로워\n"+follower.toString());
-            }
-        });
-    }
-    public void get_following(){
-        user_following = findViewById(R.id.following);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                Integer following = document.getLong("following").intValue();
-
-                user_following.setText("팔로잉\n"+following.toString());
-            }
-        });
-    }*/
-   private void startToast(String msg) {
-       Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-   }
 
 
 }

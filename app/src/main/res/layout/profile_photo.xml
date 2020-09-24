@@ -19,7 +19,7 @@
             android:layout_marginTop="20dp"
             android:textSize="30sp"
             android:gravity="center_horizontal"
- />
+            />
 
         <TextView
 
@@ -49,11 +49,21 @@
                 android:onClick="onClick"
                 android:src = "@mipmap/user"
                 />
+            <Button
 
+                android:id="@+id/btn_UploadPicture"
 
+                android:layout_width="200dp"
 
+                android:layout_height="30dp"
 
+                android:layout_gravity="center"
 
+                android:text="사진 선택"
+
+                android:onClick="onClick"
+
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
@@ -67,53 +77,75 @@
 
 
         </LinearLayout>
-        <EditText
-            android:layout_marginTop="30dp"
-            android:id="@+id/idsignup"
-            android:layout_width="300dp"
-            android:layout_height="34dp"
-            android:layout_gravity="center"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:id="@+id/name"
+                android:hint = "  이름"
+                android:background="@drawable/rectangle"
+                android:inputType="text"
+                android:layout_gravity="center"/>
 
-            android:background="@drawable/rectangle"
-            android:hint="  이메일"
-            android:inputType="text">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </EditText>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:id="@+id/username"
+                android:hint = "  사용자이름"
+                android:background="@drawable/rectangle"
+                android:inputType="text"
+                android:layout_gravity="center"/>
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="300dp"
-            android:layout_height="34dp"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"
-            android:background="@drawable/rectangle"
-            android:hint="  사용자이름"
-            android:inputType="text">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </EditText>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:id="@+id/email"
+                android:hint = "  이메일"
+                android:background="@drawable/rectangle"
+                android:inputType="text"
+                android:layout_gravity="center"/>
 
-        <EditText
-            android:id="@+id/passwordsignup"
-            android:layout_width="300dp"
-            android:layout_height="34dp"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"
-            android:background="@drawable/rectangle"
-            android:hint="  비밀번호"
-            android:inputType="textPassword">
-        </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:id="@+id/memo"
+                android:hint = "  소개"
+                android:background="@drawable/rectangle"
+                android:inputType="text"
+                android:layout_gravity="center"/>
 
-        <EditText
-            android:id="@+id/repasswordsignup"
-            android:layout_width="300dp"
-            android:layout_height="34dp"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"
-            android:background="@drawable/rectangle"
-            android:hint="  비밀번호 확인"
-            android:inputType="textPassword">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </EditText>
+
+
 
 
         <Button
