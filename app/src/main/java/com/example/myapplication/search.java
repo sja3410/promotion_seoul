@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.LauncherActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,6 +42,7 @@ public class search extends AppCompatActivity {
 
     private EditText search_edittext;
     private List list;  // 데이터를 넣을 리스트변수
+    private List userlist;
     private ListView search_listView;  // 검색을 보여줄 리스트변수
     private SearchAdapter adapter;  // 리스트뷰에 연결할 어댑터
     private ArrayList<String> arrayList;
@@ -64,6 +66,7 @@ public class search extends AppCompatActivity {
 
         // 리스트 생성
         list = new ArrayList<Object>();
+        userlist = new ArrayList<Object>();
 
         // 검색어 입력 이벤트 리스너
         search_edittext.addTextChangedListener(new TextWatcher() {
@@ -81,6 +84,7 @@ public class search extends AppCompatActivity {
                 String searchText = search_edittext.getText().toString();
                 settingList(searchText);
                 list.clear();
+                userlist.clear();
             }
         });
 
@@ -89,6 +93,12 @@ public class search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 해당 유저의 페이지로 이동
                 // 유저 페이지 만들고 나서 채우기
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                Object user = userlist.get(position);
+                Intent intent_mypage = new Intent(view.getContext(), mypage.class); //바꾸기 (mypage 창으로)
+                intent_mypage.putExtra("uid",user.toString());
+                startActivity(intent_mypage);
+
             }
         });
     }
@@ -103,10 +113,13 @@ public class search extends AppCompatActivity {
                     for(QueryDocumentSnapshot document : task.getResult()) {
                         HashMap<String, Object> map = new HashMap<String, Object>();
                         String username = document.getString("username");
+                        String name = document.getString("name");
                         if(username.contains(text)) {
                             map.put("userName", username);
-                            //map.put("userId", document.getId());
+                            map.put("name", name);
+                            map.put("userId", document.getId());
                             list.add(map);
+                            userlist.add(map.get("userId").toString());
                         }
                     }
                 }
@@ -116,8 +129,8 @@ public class search extends AppCompatActivity {
     }
     public void show(List list)
     {
-        String[] keys = new String[]{"userName"};
-        int[] ids = new int[]{R.id.username};
+        String[] keys = new String[]{"userName","name"};
+        int[] ids = new int[]{R.id.username, R.id.name};
         SimpleAdapter customAdapter = new SimpleAdapter(this, list, R.layout.layout, keys, ids);
         search_listView.setAdapter(customAdapter);
         startToast(ids.toString());
