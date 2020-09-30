@@ -79,16 +79,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="프로필 수정"
+                android:text="팔로우"
+                android:id = "@+id/follow_button"/>
 
-                android:id = "@+id/profile_change"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
                 android:layout_margin="5dp"
-                android:text="넣을거 생각"
-                android:id = "@+id/follow_button"
+                android:text="sdf"
                 android:layout_marginLeft="10dp"/>
 
 

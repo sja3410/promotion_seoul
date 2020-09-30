@@ -25,6 +25,7 @@ public class Post extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.search_button:
                     Intent intent_search = new Intent(v.getContext(), search.class);
+                    intent_search.putExtra("uid",uid);
                     startActivity(intent_search);
                     break;
 

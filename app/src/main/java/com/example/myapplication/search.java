@@ -52,13 +52,16 @@ public class search extends AppCompatActivity {
     CollectionReference usersCollectionRef = db.collection("Profile");
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        Intent intent = getIntent();
+        final String uid = intent.getStringExtra("uid");
         search_edittext = (EditText) findViewById(R.id.search_edittext);
         search_listView = (ListView) findViewById(R.id.search_list_view);
+
 
         FirebaseFirestoreSettings.Builder settings = new FirebaseFirestoreSettings.Builder();
         //settings.setTimestampsInSnapshotsEnabled(true);
@@ -95,8 +98,9 @@ public class search extends AppCompatActivity {
                 // 유저 페이지 만들고 나서 채우기
                 HashMap<String, Object> map = new HashMap<String, Object>();
                 Object user = userlist.get(position);
-                Intent intent_mypage = new Intent(view.getContext(), mypage.class); //바꾸기 (mypage 창으로)
-                intent_mypage.putExtra("uid",user.toString());
+                Intent intent_mypage = new Intent(view.getContext(), Friend_page.class); //바꾸기 (mypage 창으로)
+                intent_mypage.putExtra("frined_uid",user.toString());
+                intent_mypage.putExtra("my_uid", uid );
                 startActivity(intent_mypage);
 
             }
