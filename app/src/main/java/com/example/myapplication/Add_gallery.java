@@ -10,7 +10,10 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,12 +27,36 @@ import java.io.InputStream;
 
 public class Add_gallery extends AppCompatActivity {
     ImageView iv;
+    private EditText title_edittext, content_edittext;
+    private Button upload_button;
+    TextView image_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_gallery);
         checkSelfPermission();
+        title_edittext = findViewById(R.id.add_title);
+        content_edittext = findViewById(R.id.add_content);
+        upload_button = findViewById(R.id.upload_button);
+        image_name = findViewById(R.id.gallery_image_name);
+        // 업로드 버튼이 클릭되었을 때
+        upload_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 제목과 내용 문자열 생성
+                String title = title_edittext.getText().toString();
+                String content = content_edittext.getText().toString();
+                /*
+                Cloud Firestore에 글 관련 컬렉션 추가 후
+                각 요소에 맞춰 제목, 내용, 사진, 동영상, 작성자, 작성시간 등을 저장
+                */
+                // 글을 파이어베이스에 저장하고 Post 창으로 이동
+                Intent intent = new Intent(getApplicationContext(), Post.class);
+                startActivity(intent);
+            }
+        });
+
         iv = findViewById(R.id.gallery_image);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +67,7 @@ public class Add_gallery extends AppCompatActivity {
                 startActivityForResult(intent, 101);
             }
         });
+
 
     }
 
@@ -56,7 +84,6 @@ public class Add_gallery extends AppCompatActivity {
             }
         }
     }
-
 
     public void checkSelfPermission() {
         String temp = "";
@@ -87,8 +114,9 @@ public class Add_gallery extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if (requestCode == 101 && resultCode== RESULT_CANCELED){
+        } else if (requestCode == 101 && resultCode== RESULT_CANCELED){
             Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
         }
     }
+
 }
