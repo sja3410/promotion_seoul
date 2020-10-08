@@ -55,7 +55,7 @@ public class Add_gallery extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_gallery);
-        checkSelfPermission();
+        //checkSelfPermission();
         title_edittext = findViewById(R.id.add_title);
         content_edittext = findViewById(R.id.add_content);
         upload_button = findViewById(R.id.upload_button);
@@ -92,7 +92,9 @@ public class Add_gallery extends AppCompatActivity {
         Map<String, String> post = new HashMap<>();
         post.put("title", title);
         post.put("content", content);
-        db.collection("Post").document(user.getUid()).set(post, SetOptions.merge())
+        DocumentReference mypost = db.collection("Post").document(user.getUid()).collection("mypost").document();
+        String id = mypost.getId();
+        mypost.set(post, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -108,9 +110,28 @@ public class Add_gallery extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+        //DocumentReference allpost = db.collection("Post").document(user.getUid()).collection("allpost").document(id);
+        //allpost.set(post, SetOptions.merge());
+        //db.collection("Follower").document(user.getUid()).collection("")
+       /* db.collection("Post").document(user.getUid()).set(post, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(Add_gallery.this, "업로드 성공",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Add_gallery.this, "업로드 실패",
+                                Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });*/
     }
 
-    // 권한에 대한 응답이 있을 때 작동하는 함수
+    /*// 권한에 대한 응답이 있을 때 작동하는 함수
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) { // 권한을 허용했을 경우
@@ -142,6 +163,7 @@ public class Add_gallery extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 101 && resultCode == RESULT_OK) {
@@ -156,6 +178,6 @@ public class Add_gallery extends AppCompatActivity {
         } else if (requestCode == 101 && resultCode== RESULT_CANCELED){
             Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 }
