@@ -14,6 +14,12 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="저장"/>
 
     <EditText
         android:id="@+id/add_title"
@@ -46,11 +52,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/upload_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="저장"/>
+
 
 </LinearLayout>
