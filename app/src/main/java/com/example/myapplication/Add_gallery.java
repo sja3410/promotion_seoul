@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -32,8 +34,15 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +51,8 @@ public class Add_gallery extends AppCompatActivity {
     ImageView iv;
     private EditText title_edittext, content_edittext;
     private Button upload_button;
+    private Uri photopath;
+    private ImageView gallery_image;
     private static final String TAG = "post";
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
@@ -59,13 +70,16 @@ public class Add_gallery extends AppCompatActivity {
         title_edittext = findViewById(R.id.add_title);
         content_edittext = findViewById(R.id.add_content);
         upload_button = findViewById(R.id.upload_button);
+        gallery_image = findViewById(R.id.gallery_image);
 
         // 업로드 버튼이 클릭되었을 때
         upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 글을 파이어베이스에 저장하고 Post 창으로 이동
-                uploadPost();
+                String filename = uploadFile();
+                if (filename != null)
+                    uploadPost(filename);
                 Intent intent = new Intent(getApplicationContext(), Post.class);
                 startActivity(intent);
             }
@@ -74,24 +88,93 @@ public class Add_gallery extends AppCompatActivity {
         iv = findViewById(R.id.gallery_image);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // 사진 선택
                 Intent intent = new Intent();
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 101);
+                startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
             }
         });
 
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            photopath = data.getData();
+            Log.d(TAG, "uri:" + String.valueOf(photopath));
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photopath);
 
-    public void uploadPost() {
+                gallery_image.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == 101 && resultCode== RESULT_CANCELED){
+            Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
+    }
+    }
+    public String uploadFile() {
+        //업로드할 파일이 있으면 수행
+        if (photopath != null) {
+            //업로드 진행 Dialog 보이기
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.show();
+
+            //storage
+
+            //Unique한 파일명을 만들자.
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+            Date now = new Date();
+            String filename = formatter.format(now) + ".jpg";
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            //storage 주소와 폴더 파일명을 지정해 준다.
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://promotion-aece9.appspot.com").child("Post_img/" + filename);
+
+            //올라가거라...
+            storageRef.putFile(photopath)
+                    //성공시
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            startToast("파일 업로드 완료!");
+                        }
+                    })
+                    //실패시
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+                            startToast("파일 업로드 실패!");
+                        }
+                    })
+                    //진행중
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //dialog에 진행률을 퍼센트로 출력해 준다
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
+                        }
+                    });
+            return "Post_img/" + filename;
+        } else {
+            startToast("파일을 선택해주세요!");
+            return null;
+        }
+    }
+
+    public void uploadPost(String filename) {
         String title = ((EditText) findViewById(R.id.add_title)).getText().toString();
         String content = ((EditText) findViewById(R.id.add_content)).getText().toString();
 
         Map<String, String> post = new HashMap<>();
         post.put("title", title);
         post.put("content", content);
+        post.put("photo", filename);
         DocumentReference mypost = db.collection("Post").document(user.getUid()).collection("mypost").document();
         String id = mypost.getId();
         mypost.set(post, SetOptions.merge())
@@ -113,25 +196,9 @@ public class Add_gallery extends AppCompatActivity {
         //DocumentReference allpost = db.collection("Post").document(user.getUid()).collection("allpost").document(id);
         //allpost.set(post, SetOptions.merge());
         //db.collection("Follower").document(user.getUid()).collection("")
-       /* db.collection("Post").document(user.getUid()).set(post, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(Add_gallery.this, "업로드 성공",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Add_gallery.this, "업로드 실패",
-                                Toast.LENGTH_SHORT).show();
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });*/
     }
 
-    /*// 권한에 대한 응답이 있을 때 작동하는 함수
+    // 권한에 대한 응답이 있을 때 작동하는 함수
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) { // 권한을 허용했을 경우
@@ -163,8 +230,7 @@ public class Add_gallery extends AppCompatActivity {
 
 
     }
-
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 101 && resultCode == RESULT_OK) {
             try {
@@ -179,5 +245,7 @@ public class Add_gallery extends AppCompatActivity {
             Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
         }
     }*/
-
+    private void startToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
 }
