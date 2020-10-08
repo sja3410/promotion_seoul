@@ -22,14 +22,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Add_gallery extends AppCompatActivity {
     ImageView iv;
     private EditText title_edittext, content_edittext;
     private Button upload_button;
-    TextView image_name;
+    private static final String TAG = "post";
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference mDatabase;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    // FirebaseUser user = mAuth.getCurrentUser();
+    CollectionReference usersCollectionRef = db.collection("Post");
+    DocumentReference docRef = db.collection("Post").document(user.getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +59,13 @@ public class Add_gallery extends AppCompatActivity {
         title_edittext = findViewById(R.id.add_title);
         content_edittext = findViewById(R.id.add_content);
         upload_button = findViewById(R.id.upload_button);
-        image_name = findViewById(R.id.gallery_image_name);
+
         // 업로드 버튼이 클릭되었을 때
         upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 제목과 내용 문자열 생성
-                String title = title_edittext.getText().toString();
-                String content = content_edittext.getText().toString();
-                /*
-                Cloud Firestore에 글 관련 컬렉션 추가 후
-                각 요소에 맞춰 제목, 내용, 사진, 동영상, 작성자, 작성시간 등을 저장
-                */
                 // 글을 파이어베이스에 저장하고 Post 창으로 이동
+                uploadPost();
                 Intent intent = new Intent(getApplicationContext(), Post.class);
                 startActivity(intent);
             }
@@ -69,6 +83,31 @@ public class Add_gallery extends AppCompatActivity {
         });
 
 
+    }
+
+    public void uploadPost() {
+        String title = ((EditText) findViewById(R.id.add_title)).getText().toString();
+        String content = ((EditText) findViewById(R.id.add_content)).getText().toString();
+
+        Map<String, String> post = new HashMap<>();
+        post.put("title", title);
+        post.put("content", content);
+        db.collection("Post").document(user.getUid()).set(post, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(Add_gallery.this, "업로드 성공",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Add_gallery.this, "업로드 실패",
+                                Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     // 권한에 대한 응답이 있을 때 작동하는 함수

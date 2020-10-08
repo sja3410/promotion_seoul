@@ -44,14 +44,6 @@
             app:srcCompat = "@mipmap/ic_launcher_round" >
         </ImageView>
 
-        <TextView
-            android:id="@+id/gallery_image_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="지금은 임시로 적었지만, 나중엔 삽입된 사진이나 동영상 이름 넣을 곳"
-            android:textSize="15dp"/>
-
     </LinearLayout>
 
     <Button
