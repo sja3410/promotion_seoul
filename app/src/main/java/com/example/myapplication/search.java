@@ -99,7 +99,7 @@ public class search extends AppCompatActivity {
                 HashMap<String, Object> map = new HashMap<String, Object>();
                 Object user = userlist.get(position);
                 Intent intent_mypage = new Intent(view.getContext(), Friend_page.class); //바꾸기 (mypage 창으로)
-                intent_mypage.putExtra("frined_uid",user.toString());
+                intent_mypage.putExtra("friend_uid",user.toString());
                 intent_mypage.putExtra("my_uid", uid );
                 startActivity(intent_mypage);
 

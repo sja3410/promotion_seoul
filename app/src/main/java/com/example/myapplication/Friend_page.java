@@ -21,6 +21,7 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Integer.getInteger;
 import static java.lang.Integer.parseInt;
 
 public class Friend_page extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class Friend_page extends AppCompatActivity {
         write_user = findViewById(R.id.write_username);
         Intent intent = getIntent();
         friend_uid = intent.getStringExtra("friend_uid");
+        //startToast(friend_uid);
         my_uid= intent.getStringExtra("my_uid");
         getUsername();
     }
@@ -60,19 +62,23 @@ public class Friend_page extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.follow_button:
+                    startToast(my_uid);
                     //팔로우 수 증가
                     usersCollectionRef.document(my_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
+                           // String follower = document.get("follower").toString();
                             int follower = parseInt(document.getString("follower"));
-                            follower += 1;
-                            user.put("follower", follower);
+                            follower = follower+1;
+                            startToast(Integer.toString(follower));
+                            user.put("follower", Integer.toString(follower));
                             db.collection("Profile").document(my_uid)
                                     .set(user, SetOptions.merge());
                             user.clear();
-                            follow.put("follower_uid", friend_uid);
-                            db.collection("Follower").document(my_uid).set(follow, SetOptions.merge());
+                            follow.put("follower_uid", 1);
+                            db.collection("Follower").document(my_uid).collection("Follower").document(friend_uid).set(follow, SetOptions.merge());
+                            //db.collection("Follower").document(my_uid).set(follow, SetOptions.merge());
                             follow.clear();
                         }
                     });
@@ -84,11 +90,13 @@ public class Friend_page extends AppCompatActivity {
                             int following= parseInt(document.getString("following"));
                             following += 1;
                             user.put("following", following);
-                            db.collection("Profile").document(my_uid)
+                            db.collection("Profile").document(friend_uid)
                                     .set(user, SetOptions.merge());
                             user.clear();
-                            follow.put("following_uid", my_uid);
-                            db.collection("Following").document(friend_uid).set(follow, SetOptions.merge());
+                            follow.put("follower_uid", 1);
+                            db.collection("Follower").document(friend_uid).collection("Following").document(my_uid).set(follow,SetOptions.merge());
+                            //follow.put("following_uid", my_uid);
+                            //db.collection("Following").document(friend_uid).set(follow, SetOptions.merge());
                             follow.clear();
                         }
                     });
@@ -104,6 +112,8 @@ public class Friend_page extends AppCompatActivity {
         user_posting = findViewById(R.id.gesi);
         user_follower = findViewById(R.id.follower);
         user_following = findViewById(R.id.following);
+
+     //   startToast(friend_uid);
         //startToast(uid);
         usersCollectionRef.document(friend_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
