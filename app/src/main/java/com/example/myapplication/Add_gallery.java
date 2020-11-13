@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +57,7 @@ public class Add_gallery extends AppCompatActivity {
     private Button upload_button;
     private Uri photopath;
     private ImageView gallery_image;
+    private Button category;
     private static final String TAG = "post";
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
@@ -71,6 +76,7 @@ public class Add_gallery extends AppCompatActivity {
         content_edittext = findViewById(R.id.add_content);
         upload_button = findViewById(R.id.upload_button);
         gallery_image = findViewById(R.id.gallery_image);
+        category = findViewById(R.id.category);
 
         // 업로드 버튼이 클릭되었을 때
         upload_button.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +103,51 @@ public class Add_gallery extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.gesi_menu, menu);
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id==1){
+            return true;
+        }
+        else if (id == 2) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        category.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                PopupMenu pop = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.gesi_menu, pop.getMenu());
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.one:
+                                // 파이어베이스에 넣기 (운동)
+                                break;
+                            case R.id.two:
+                                // 파이어베이스에 넣기(음식)
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                pop.show();
+            }
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
