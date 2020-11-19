@@ -58,6 +58,7 @@ public class Add_gallery extends AppCompatActivity {
     private Uri photopath;
     private ImageView gallery_image;
     private Button category;
+    private String catego;
     private static final String TAG = "post";
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
@@ -84,7 +85,7 @@ public class Add_gallery extends AppCompatActivity {
             public void onClick(View v) {
                 // 글을 파이어베이스에 저장하고 Post 창으로 이동
                 String filename = uploadFile();
-                if (filename != null)
+                if (filename != null || filename == null)
                     uploadPost(filename);
                 Intent intent = new Intent(getApplicationContext(), Post.class);
                 startActivity(intent);
@@ -135,11 +136,15 @@ public class Add_gallery extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.one:
+                            case R.id.exercise:
                                 // 파이어베이스에 넣기 (운동)
+                                catego = "exercise";
+                                category.setText("운동");
                                 break;
-                            case R.id.two:
+                            case R.id.food:
                                 // 파이어베이스에 넣기(음식)
+                                catego = "food";
+                                category.setText("음식");
                                 break;
                         }
                         return true;
@@ -164,7 +169,7 @@ public class Add_gallery extends AppCompatActivity {
             }
         } else if (requestCode == 101 && resultCode== RESULT_CANCELED){
             Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
-    }
+        }
     }
     public String uploadFile() {
         //업로드할 파일이 있으면 수행
@@ -213,7 +218,7 @@ public class Add_gallery extends AppCompatActivity {
                     });
             return "Post_img/" + filename;
         } else {
-            startToast("파일을 선택해주세요!");
+            //startToast("파일을 선택해주세요!");
             return null;
         }
     }
@@ -226,7 +231,9 @@ public class Add_gallery extends AppCompatActivity {
         post.put("title", title);
         post.put("content", content);
         post.put("photo", filename);
-        DocumentReference mypost = db.collection("Post").document(user.getUid()).collection("mypost").document();
+        String path = "Post_"+catego;
+        //DocumentReference mypost = db.collection("Post").document(user.getUid()).collection("mypost").document();
+        DocumentReference mypost = db.collection(path).document(user.getUid()).collection("mypost").document();
         String id = mypost.getId();
         mypost.set(post, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
