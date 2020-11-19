@@ -3,8 +3,10 @@ package com.example.myapplication;
 import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,8 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -25,6 +32,7 @@ import static java.lang.Integer.getInteger;
 import static java.lang.Integer.parseInt;
 
 public class Friend_page extends AppCompatActivity {
+    private static final String TAG = "friend_page";
     TextView user_name;
     TextView write_user;
     Map<String, Object> user = new HashMap<>();
@@ -39,6 +47,7 @@ public class Friend_page extends AppCompatActivity {
     /* FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
      FirebaseFirestore db = FirebaseFirestore.getInstance();
      DocumentReference docRef = db.collection("Profile").document(user.getUid());*/
+    FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersCollectionRef = db.collection("Profile");
 
@@ -63,14 +72,15 @@ public class Friend_page extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.follow_button:
                     startToast(my_uid);
-                    //팔로우 수 증가
+                    // 내 팔로우 수 증가
                     usersCollectionRef.document(my_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
-                           // String follower = document.get("follower").toString();
+                            // String follower = document.get("follower").toString();
                             int follower = parseInt(document.getString("follower"));
-                            follower = follower+1;
+                            follower = follower + 1;
+                            /*
                             startToast(Integer.toString(follower));
                             user.put("follower", Integer.toString(follower));
                             db.collection("Profile").document(my_uid)
@@ -80,15 +90,36 @@ public class Friend_page extends AppCompatActivity {
                             db.collection("Follower").document(my_uid).collection("Follower").document(friend_uid).set(follow, SetOptions.merge());
                             //db.collection("Follower").document(my_uid).set(follow, SetOptions.merge());
                             follow.clear();
+                            */
+                            //Map<String, Object> profile = new HashMap<>();
+                            //profile.put("follower", Integer.toString(follower));
+                            DocumentReference mypageRef = db.collection("Profile").document(my_uid);
+                            mypageRef
+                                    .update("follower", follower);
+                                    /*
+                                    .addOnCompleteListener(new OnSuccessListener<Void>(){
+                                        @Override
+                                        public void onSuccess(Void aVoid){
+                                            Log.d(TAG, "업데이트 성공");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "업데이트 실패", e);
+                                        }
+                                    });
+                                     */
                         }
                     });
-                    //팔로잉 수 증가
+                    // 친구 팔로잉 수 증가
                     usersCollectionRef.document(friend_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
                             int following= parseInt(document.getString("following"));
-                            following += 1;
+                            following = following + 1;
+                            /*
                             user.put("following", following);
                             db.collection("Profile").document(friend_uid)
                                     .set(user, SetOptions.merge());
@@ -98,6 +129,25 @@ public class Friend_page extends AppCompatActivity {
                             //follow.put("following_uid", my_uid);
                             //db.collection("Following").document(friend_uid).set(follow, SetOptions.merge());
                             follow.clear();
+                            */
+                            DocumentReference friendpageRef = db.collection("Profile").document(friend_uid);
+                            friendpageRef
+                                    .update("following", following);
+                                    /*
+                                    .addOnCompleteListener(new OnSuccessListener<Void>(){
+                                        @Override
+                                        public void onSuccess(Void aVoid){
+                                            Log.d(TAG, "업데이트 성공");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "업데이트 실패", e);
+                                        }
+                                    });
+
+                                     */
                         }
                     });
                     break;
