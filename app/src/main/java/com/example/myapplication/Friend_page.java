@@ -61,8 +61,9 @@ public class Friend_page extends AppCompatActivity {
         write_user = findViewById(R.id.write_username);
         Intent intent = getIntent();
         friend_uid = intent.getStringExtra("friend_uid");
-        //startToast(friend_uid);
+        startToast(friend_uid);
         my_uid= intent.getStringExtra("my_uid");
+        startToast(my_uid);
         getUsername();
     }
 
@@ -78,8 +79,10 @@ public class Friend_page extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
                             // String follower = document.get("follower").toString();
-                            int follower = parseInt(document.getString("follower"));
+                            // int follower = parseInt(document.getString("follower"));
+                            long follower = document.getLong("follower");
                             follower = follower + 1;
+                            startToast(Long.toString(follower));
                             /*
                             startToast(Integer.toString(follower));
                             user.put("follower", Integer.toString(follower));
@@ -109,7 +112,7 @@ public class Friend_page extends AppCompatActivity {
                                             Log.w(TAG, "업데이트 실패", e);
                                         }
                                     });
-                                     */
+                                    */
                         }
                     });
                     // 친구 팔로잉 수 증가
@@ -117,7 +120,8 @@ public class Friend_page extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
-                            int following= parseInt(document.getString("following"));
+                            // int following= parseInt(document.getString("following"));
+                            long following = document.getLong("following");
                             following = following + 1;
                             /*
                             user.put("following", following);
