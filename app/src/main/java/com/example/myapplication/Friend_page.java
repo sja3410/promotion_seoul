@@ -152,6 +152,7 @@ public class Friend_page extends AppCompatActivity {
                                     });
 
                                      */
+                            getUsername();
                         }
                     });
                     break;
