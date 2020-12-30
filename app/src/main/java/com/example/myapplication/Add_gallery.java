@@ -28,14 +28,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -65,7 +68,7 @@ public class Add_gallery extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     // FirebaseUser user = mAuth.getCurrentUser();
-    CollectionReference usersCollectionRef = db.collection("Post");
+    CollectionReference usersCollectionRef = db.collection("Profile");
     DocumentReference docRef = db.collection("Post").document(user.getUid());
 
     @Override
@@ -238,8 +241,10 @@ public class Add_gallery extends AppCompatActivity {
         post.put("content", content);
         post.put("photo", filename);
         String path = "Post_"+catego;
+        String path1 = "Post";
         //DocumentReference mypost = db.collection("Post").document(user.getUid()).collection("mypost").document();
         DocumentReference mypost = db.collection(path).document(user.getUid()).collection("mypost").document();
+        DocumentReference mypost1 = db.collection(path1).document(user.getUid()).collection("private_post").document();
         String id = mypost.getId();
         mypost.set(post, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -257,6 +262,20 @@ public class Add_gallery extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+        mypost1.set(post, SetOptions.merge());
+
+        usersCollectionRef.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                long postnum = document.getLong("posting");
+                postnum = postnum + 1;
+
+                DocumentReference mypageRef = db.collection("Profile").document(user.getUid());
+                mypageRef
+                        .update("posting", postnum);
+            }
+        });
         //DocumentReference allpost = db.collection("Post").document(user.getUid()).collection("allpost").document(id);
         //allpost.set(post, SetOptions.merge());
         //db.collection("Follower").document(user.getUid()).collection("")
