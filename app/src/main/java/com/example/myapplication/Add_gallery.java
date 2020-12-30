@@ -122,6 +122,9 @@ public class Add_gallery extends AppCompatActivity {
         else if (id == 2) {
             return true;
         }
+        else if (id == 3) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
     @Override
@@ -146,6 +149,9 @@ public class Add_gallery extends AppCompatActivity {
                                 catego = "food";
                                 category.setText("음식");
                                 break;
+                            case R.id.place:
+                                catego = "place";
+                                category.setText("명소");
                         }
                         return true;
                     }

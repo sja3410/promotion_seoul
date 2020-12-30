@@ -6,4 +6,7 @@
     <item
         android:id="@+id/food"
         android:title="음식"/>
+    <item
+        android:id="@+id/place"
+        android:title ="명소"/>
 </menu>
